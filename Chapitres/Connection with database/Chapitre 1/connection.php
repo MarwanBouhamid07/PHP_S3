@@ -9,7 +9,7 @@ $dsn= "mysql:host=$host;dbname=$dbname;charset=utf8";
 try {
     $pdo = new PDO($dsn, $username, $password);// open a connection to db - pdo is an object.
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "connection is succese with database : $dbname";
+    echo "connection is succese with database : $dbname <br>";
 } catch (PDOException $e) {
     echo "have an error in connection :" . $e->getMessage();
 }
