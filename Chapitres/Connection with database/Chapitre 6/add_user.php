@@ -1,21 +1,26 @@
 <?php
 require '../Chapitre 1/connection.php';
 
-$nom = htmlspecialchars(trim($_POST['nom']));
-$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+$name = htmlspecialchars(trim($_POST['name']));
+$age = $_POST["age"];
 
-if (!$email) {
-    die("Email invalide !");
+if(gettype($age) == "integer" || $age > 0){
+    die('is it not number'); 
 }
 
+function validate_numeric($age) {
+    return is_numeric($age) && $age > 0;
+}
+$sql = 'UPDATE users set name = :name , age = :age';
+$stmt = $pdo->prepare();
   $stmt->execute([
     'nom' => $nom,
-    'email' => $email
+    'age' => $age
 ]);
-echo "Utilisateur ajouté avec succès.";
+echo "user is add it.";
 
 try {
 } catch (PDOException $e) {
-    file_put_contents('logs/errors.log', $e->getMessage(), FILE_APPEND);
-    echo "Une erreur est survenue. Contactez l’administrateur.";
+    file_put_contents('logs/error.log', $e->getMessage(), FILE_APPEND);
+    echo "Have a error in server";
 }
