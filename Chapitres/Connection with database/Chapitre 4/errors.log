@@ -1,0 +1,1 @@
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'store_db.users123' doesn't existdate:2026-03-11 11:16:06SQLSTATE[HY000] [2002] Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refuséedate:2026-03-11 11:17:08SQLSTATE[HY000] [2002] Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refuséedate: 2026-03-11 11:18:48
