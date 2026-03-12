@@ -7,6 +7,7 @@ $age = filter_var($_POST['emial'], FILTER_VALIDATE_EMAIL);
 if (!$email) {
     die("invalide email !");
 }
+try {
 $sql = 'UPDATE users set name = :name , email = :email';
 $stmt = $pdo->prepare();
   $stmt->execute([
@@ -15,7 +16,6 @@ $stmt = $pdo->prepare();
 ]);
 echo "Utilisateur ajouté avec succès.";
 
-try {
 } catch (PDOException $e) {
     file_put_contents('logs/errors.log', $e->getMessage(), FILE_APPEND);
     echo "Une erreur est survenue. Contactez l’administrateur.";
