@@ -1,0 +1,3 @@
+I have tow files first file is databse.php this file make connection with the database 
+
+test_pdo.php => include the file databse and make a connection with my databse after that i select all data in table articles and i display every article in the website aritcle by article then i insert into this table another article after that i was update a aritcle i change autheur and id finelly i delete an article from the same table
