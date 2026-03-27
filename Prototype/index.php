@@ -1,3 +1,44 @@
+<?php
+require_once 'database.php';
+require_once 'articles.php';
+
+$database = new Database();
+$db = $database->getconnection();
+
+$article = new Article($db);
+$result = $article->read();
+$num = $result->rowCount();
+
+function lastThreeArticles($db){
+        $sql = 'SELECT * FROM article ORDER BY date_publication DESC LIMIT 3;';
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // lastThreeArticles($db);
+
+if($num > 0){
+    $articles_arr = array();
+    $articles_arr['data'] = array();
+    while($row = $result->fetch(PDO::FETCH_ASSOC)){
+        extract($row);
+        $article_item = array(
+            'id' => $id,
+            'title' => $title,
+            'description' => $description,
+            'image' => $image_path,
+            'date' => $date_publication,
+            'autor' => $auteur,
+            'categorie' => $categorie
+        );
+        array_push($articles_arr['data'], $article_item);
+    }
+    
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,41 +49,30 @@
     <script src="https://kit.fontawesome.com/8f8b4a4f39.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <div class="logo-blog">MARWAN BLOG</div>
+      <header class="navbar">
+        <div class="logo">MARWAN BLOG</div>
         <nav>
-            <a href="">Home</a>
-            <a href="">Blog</a>
-            <a href="">Categories</a>
-            <a href="">Contact</a>
+            <a href="index.php" class="active">Home</a>
+            <a href="create.php" >Create an article</a>
+            <a href="contact.html">Contact</a>
         </nav>
     </header>
 <div class="wrapper">
     <main>
-        <section>
-            <img src="" alt="">
-            <p class="date">March 15-2024</p>
-            <p class="autor">Ahmed</p>
-            <h3 class="title-article">Blog Post title Goes here</h3>
-            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis pariatur repellendus nihil ab reiciendis iusto culpa vel accusamus tempore consectetur officiis ea, natus iste! Expedita laboriosam libero natus veritatis ullam.</p>
-            <button class="more">Read More</button>
-        </section>
-        <section>
-            <img src="" alt="">
-            <p class="date">March 15-2024</p>
-            <p class="autor">Ahmed</p>
-            <h3 class="title-article">Blog Post title Goes here</h3>
-            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis pariatur repellendus nihil ab reiciendis iusto culpa vel accusamus tempore consectetur officiis ea, natus iste! Expedita laboriosam libero natus veritatis ullam.</p>
-            <button class="more">Read More</button>
-        </section>
-        <section>
-            <img src="" alt="">
-            <p class="date">March 15-2024</p>
-            <p class="autor">Ahmed</p>
-            <h3 class="title-article">Blog Post title Goes here</h3>
-            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis pariatur repellendus nihil ab reiciendis iusto culpa vel accusamus tempore consectetur officiis ea, natus iste! Expedita laboriosam libero natus veritatis ullam.</p>
-            <button class="more">Read More</button>
-        </section>
+        <?php if($num > 0) : ?>
+            <?php foreach($articles_arr['data'] as $article) : ?>
+                <section>
+                    <img src="<?php echo $article['image']; ?>" alt="">
+                    <p class="date"><?php echo $article['date']; ?></p>
+                    <p class="autor"><?php echo $article['autor']; ?></p>
+                    <h3 class="title-article"><?php echo $article['title']; ?></h3>
+                    <p class="description"><?php echo $article['description']; ?></p>
+                    <button class="more">Read More</button>
+                </section>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p>No articles found</p>
+        <?php endif; ?>
         <div class="numbering">
             <a href="">1</a>
             <a href="">2</a>
@@ -53,7 +83,7 @@
         <div class="search">
             <form method="GET">
                 <label for="search">Search:</label>
-                <input type="text" placeholder="search..." name="search" id="search">
+                <input type="text" placeholder="search..." name="search" id="search" style="width: 80%;padding: 5px;border: 1px solid #ccc;border-radius: 4px;">
                 <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
@@ -67,28 +97,24 @@
                 <a href="">News</a>
             </div>
         </div>
+        
             <div class="recent-posts">
+  
+            <?PHP 
+            $data = lastThreeArticles($db);
+            if (!empty($data)):
+                foreach($data as $article):
+            ?>
+                
                 <div class="lasts-post">
-                    <img src="" alt="">
+                    <img src="<?php echo $article['image_path'];?>" >
                     <div class="title-and-date">
-                        <div class="title-RP">Post Title Here</div>
-                        <div class="date-RP">Mar 15</div>
+                        <div class="title-RP"><?php echo $article['title'];?></div>
+                        <div class="date-RP"><?php echo $article['date_publication'];?></div>
                     </div>
                 </div>
-                <div class="lasts-post">
-                    <img src="" alt="">
-                    <div class="title-and-date">
-                        <div class="title-RP">Post Title Here</div>
-                        <div class="date-RP">Mar 15</div>
-                    </div>
-                </div>
-                <div class="lasts-post">
-                    <img src="" alt="">
-                    <div class="title-and-date">
-                        <div class="title-RP">Post Title Here</div>
-                        <div class="date-RP">Mar 15</div>
-                    </div>
-                </div>
+                <?php endforeach; ?> 
+<?php endif; ?>
             </div>
             <div class="tags">
                 <a href="">Design</a>
