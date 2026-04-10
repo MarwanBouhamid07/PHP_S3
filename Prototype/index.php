@@ -9,15 +9,15 @@ $article = new Article($db);
 $result = $article->read();
 $num = $result->rowCount();
 
-function lastThreeArticles($db){
-        $sql = 'SELECT * FROM article ORDER BY date_publication DESC LIMIT 3;';
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $stmt->fetch(PDO::FETCH_ASSOC);
+// function lastThreeArticles($db){
+//         $sql = 'SELECT * FROM article ORDER BY date_publication DESC LIMIT 3;';
+//         $stmt = $db->prepare($sql);
+//         $stmt->execute();
+//         $stmt->fetch(PDO::FETCH_ASSOC);
         
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    // lastThreeArticles($db);
+//         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+//     }
+//     // lastThreeArticles($db);
 
 if($num > 0){
     $articles_arr = array();
@@ -35,6 +35,8 @@ if($num > 0){
         );
         array_push($articles_arr['data'], $article_item);
     }
+
+
     
 }
 

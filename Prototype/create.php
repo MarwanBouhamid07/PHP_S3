@@ -10,9 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $target_dir = "uploads/images/";
 
     
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0777, true);
-    }
 
     $image_path_for_db = "";
 
